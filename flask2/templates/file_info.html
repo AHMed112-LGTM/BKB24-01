@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о файле - {{ file.original_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .info-row {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            width: 180px;
+            color: #495057;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #212529;
+            word-break: break-all;
+        }
+
+        .uuid-value {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .path-value {
+            font-family: monospace;
+            font-size: 12px;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        .hash-value {
+            font-family: monospace;
+            font-size: 11px;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .info-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .info-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 Информация о файле</h1>
+        </div>
+
+        <div class="content">
+            <a href="/" class="back-link">← Назад к списку</a>
+
+            <div class="info-card">
+                <div class="info-row">
+                    <div class="info-label">UUID имя:</div>
+                    <div class="info-value"><span class="uuid-value">{{ file.uuid_name }}</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Оригинальное имя:</div>
+                    <div class="info-value"><strong>{{ file.original_name }}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Путь на сервере:</div>
+                    <div class="info-value"><span class="path-value">{{ file.relative_path }}</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Расширение:</div>
+                    <div class="info-value">{{ file.extension or 'нет' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Размер:</div>
+                    <div class="info-value">{{ file.size_formatted }} ({{ file.file_size }} байт)</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">MD5 хэш:</div>
+                    <div class="info-value"><span class="hash-value">{{ file.file_hash }}</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Дата загрузки:</div>
+                    <div class="info-value">{{ file.upload_date[:19].replace('T', ' ') }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Полный путь:</div>
+                    <div class="info-value">{{ file.relative_path }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
