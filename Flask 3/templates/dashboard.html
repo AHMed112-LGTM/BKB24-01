@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation .circle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #333;
+            padding: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .logout-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 8px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .card-header h2 {
+            color: #333;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .users-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .users-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .users-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .users-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .badge.user {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .badge.current {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .delete-btn:hover {
+            background: #dc3545;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .flash.success {
+            background: rgba(212, 237, 218, 0.95);
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .flash.danger {
+            background: rgba(248, 215, 218, 0.95);
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .flash.warning {
+            background: rgba(255, 243, 205, 0.95);
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .flash.info {
+            background: rgba(209, 236, 241, 0.95);
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="circle" style="width: 300px; height: 300px; top: -100px; right: -100px;"></div>
+        <div class="circle" style="width: 200px; height: 200px; bottom: 50px; left: -50px; animation-delay: -5s;"></div>
+        <div class="circle" style="width: 150px; height: 150px; top: 50%; left: 20%; animation-delay: -10s;"></div>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <h1>📊 Система управления пользователями</h1>
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ current_user[0].upper() }}
+                </div>
+                <span><strong>{{ current_user }}</strong></span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Статистика -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ users|length }}</div>
+                <div class="stat-label">Всего пользователей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {% set active = 0 %}
+                    {% for user in users.values() %}
+                        {% if user.last_login %}
+                            {% set active = active + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ active }}
+                </div>
+                <div class="stat-label">Активных пользователей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {% set admin_count = 0 %}
+                    {% for user in users.values() %}
+                        {% if user.role == 'admin' %}
+                            {% set admin_count = admin_count + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ admin_count }}
+                </div>
+                <div class="stat-label">Администраторов</div>
+            </div>
+        </div>
+
+        <!-- Список пользователей -->
+        <div class="card">
+            <div class="card-header">
+                <h2>👥 Список пользователей</h2>
+                {% if is_admin %}
+                    <a href="{{ url_for('register_user') }}" class="btn btn-primary">➕ Новый пользователь</a>
+                {% endif %}
+            </div>
+
+            {% if users %}
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Имя пользователя</th>
+                            <th>Роль</th>
+                            <th>Дата регистрации</th>
+                            <th>Последняя авторизация</th>
+                            {% if is_admin %}
+                                <th>Действия</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for username, user_data in users.items() %}
+                            <tr>
+                                <td>
+                                    <strong>{{ username }}</strong>
+                                    {% if username == current_user %}
+                                        <span class="badge current" style="margin-left: 10px;">Текущий</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user_data.role == 'admin' %}
+                                        <span class="badge admin">Администратор</span>
+                                    {% else %}
+                                        <span class="badge user">Пользователь</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user_data.registration_date %}
+                                        {{ user_data.registration_date[:19].replace('T', ' ') }}
+                                    {% else %}
+                                        Не указана
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user_data.last_login %}
+                                        {{ user_data.last_login[:19].replace('T', ' ') }}
+                                    {% else %}
+                                        Никогда
+                                    {% endif %}
+                                </td>
+                                {% if is_admin %}
+                                    <td>
+                                        {% if username != 'admin' and username != current_user %}
+                                            <a href="{{ url_for('delete_user', username=username) }}"
+                                               class="delete-btn"
+                                               onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ username }}?')">
+                                                Удалить
+                                            </a>
+                                        {% elif username == current_user and username != 'admin' %}
+                                            <span style="color: #999; font-size: 12px;">Нельзя удалить себя</span>
+                                        {% elif username == 'admin' %}
+                                            <span style="color: #999; font-size: 12px;">Защищен</span>
+                                        {% endif %}
+                                    </table>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <p>Пользователи не найдены</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
