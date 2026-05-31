@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Блог{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem;">{{ title }}</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.title.label }}
+                {{ form.title(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.title.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.category_id.label }}
+                {{ form.category_id(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.category_id.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.tags.label }}
+                {{ form.tags(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px; height: 120px;") }}
+                <small style="color: #666;">Удерживайте Ctrl (или Cmd на Mac) для выбора нескольких тегов</small>
+                {% for error in form.tags.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.content.label }}
+                {{ form.content(rows=10, class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px; font-family: monospace;") }}
+                {% for error in form.content.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label>
+                    {{ form.is_private() }}
+                    {{ form.is_private.label }}
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Блог{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem;">{{ title }}</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.name.label }}
+                {{ form.name(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.name.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+                <a href="{{ url_for('tags') }}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

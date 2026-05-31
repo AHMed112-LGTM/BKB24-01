@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Вход - Блог{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 1.5rem;">🔐 Вход в систему</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.username.label }}
+                {{ form.username(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.username.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.password.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1rem;">
+            Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a>
+        </p>
+
+        <hr style="margin: 1rem 0;">
+
+        <div style="background: #f8f9fa; padding: 0.5rem; border-radius: 5px; font-size: 0.85rem;">
+            <p><strong>Тестовый администратор:</strong><br>
+            Логин: admin<br>
+            Пароль: Admin123</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

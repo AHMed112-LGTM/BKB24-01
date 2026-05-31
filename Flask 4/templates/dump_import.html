@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Импорт дампа - Блог{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem;">📥 Импорт данных из JSON</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div style="margin-bottom: 1rem;">
+                <label>Выберите JSON файл с дампом:</label>
+                <input type="file" name="dump_file" accept=".json" required style="margin-top: 0.5rem;">
+            </div>
+
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; font-size: 0.85rem;">
+                <strong>⚠️ Внимание:</strong>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Импорт не перезаписывает существующие данные</li>
+                    <li>Новые записи добавляются в базу</li>
+                    <li>Для импортированных пользователей будет установлен временный пароль "Temp123"</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Импортировать</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Блог{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 1.5rem;">📝 Регистрация</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.username.label }}
+                {{ form.username(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.username.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.email.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.password.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="form-control", style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 5px;") }}
+                {% for error in form.confirm_password.errors %}
+                    <span style="color: red; font-size: 0.85rem;">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1rem;">
+            Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
